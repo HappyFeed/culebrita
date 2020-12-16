@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"text/template"
 
-	"./cockroachdb"
+	"./models"
 	"github.com/go-chi/chi"
 )
 
@@ -21,9 +20,11 @@ func main() {
 		//RenderTemplate(w, "ui/menu", nil)
 	})
 	//r.Get("/Scores")
-	log.Fatal(http.ListenAndServe(":9080", r))
-	cockroachdb.Conn()
-
+	//log.Fatal(http.ListenAndServe(":9080", r))
+	var use = models.NewUser("Alejandro", "500")
+	use.Insert()
+	var use1 = models.NewUser("Andres", "100")
+	use1.Insert()
 }
 
 func getScores(w http.ResponseWriter, r *http.Request) {

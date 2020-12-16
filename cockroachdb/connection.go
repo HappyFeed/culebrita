@@ -2,16 +2,14 @@ package cockroachdb
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
-	"strconv"
 
 	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
 
-func init() {
+func Init() {
 	Connect()
 	CreateTable()
 }
@@ -33,36 +31,28 @@ func Connect() {
 }
 
 func CreateTable() {
-	// Create the "accounts" table.
+	// Create the "users" table.
 	if _, err := db.Exec(
-		"CREATE TABLE IF NOT EXISTS users (id SERIAL, name STRING(50) NULL, score INT NOT NULL, PRIMARY KEY (id)"); err != nil {
+		"CREATE TABLE IF NOT EXISTS users (id SERIAL, name STRING(50) NULL, score STRING(100) NOT NULL, PRIMARY KEY (id))"); err != nil {
 		log.Fatal(err)
 	}
 
 }
 
-func InsertUsers(nameUser string, scoreUser int) {
+func InsertUsers(query string) (sql.Result, error) {
 	//Inserting a Row in to DB.
-	score := strconv.Itoa(scoreUser)
-	if _, err := db.Exec("INSERT INTO users (name, score) VALUES (" + nameUser + "," + score + ");"); err != nil {
-		log.Fatal(err)
+	result, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
 	}
+	return result, err
 }
 
-func showUsers() {
+func ShowUsers(query string, args ...interface{}) (*sql.Rows, error) {
 	// Print out the balances before an account transfer (below).
-	rows, err := db.Query("SELECT name, score FROM users")
+	rows, err := db.Query(query, args...)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var name string
-		var score int64
-		if err := rows.Scan(&name, &score); err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("Name: %d \t Score: %s \n", name, score)
-	}
+	return rows, err
 }
