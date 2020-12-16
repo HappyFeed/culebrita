@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"text/template"
 
+	"./cockroachdb"
 	"github.com/go-chi/chi"
 )
 
@@ -20,8 +20,14 @@ func main() {
 		//RenderTemplate(w, "ui/menu", nil)
 	})
 	//r.Get("/Scores")
+	//log.Fatal(http.ListenAndServe(":9080", r))
+	cockroachdb.Conn()
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+}
+
+func getScores(w http.ResponseWriter, r *http.Request) {
+	/*users :=
+	json.NewEncoder(w).Encode(users)*/
 }
 
 /*func RenderTemplate(w http.ResponseWriter, name string, data interface{}) {
