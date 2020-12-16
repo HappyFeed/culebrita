@@ -4,40 +4,52 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 
 	_ "github.com/lib/pq"
 )
 
-func printBalances(db *sql.DB) {
-	// Print out the balances.
-	rows, err := db.Query("SELECT name, score FROM users")
-	if err != nil {
-		log.Fatal(err)
+var db *sql.DB
+
+func init() {
+	Connect()
+	CreateTable()
+}
+
+func GetConnection() *sql.DB {
+	return db
+}
+
+func Connect() {
+	if GetConnection() != nil {
+		return
 	}
-	defer rows.Close()
-	fmt.Println("Users:")
-	for rows.Next() {
-		var id, balance int
-		if err := rows.Scan(&id, &balance); err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("%d %d\n", id, balance)
+	// Connect to the "culebrita_db" database.
+	if connection, err := sql.Open("postgres", "postgresql://root@localhost:26257/culebrita_db?sslmode=disable"); err != nil {
+		panic(err)
+	} else {
+		db = connection
 	}
 }
 
-func Conn() {
-	// Connect to the "company_db" database.
-	db, err := sql.Open("postgres", "postgresql://root@localhost:26257/culebrita_db?sslmode=disable")
-	if err != nil {
-		log.Fatal("Error connected to database", err)
-	}
-
-	defer db.Close()
-	//Inserting a Row in to DB.
-	if _, err := db.Exec(`INSERT INTO users (name, score) VALUES ('Alejandro', 500);`); err != nil {
+func CreateTable() {
+	// Create the "accounts" table.
+	if _, err := db.Exec(
+		"CREATE TABLE IF NOT EXISTS users (id SERIAL, name STRING(50) NULL, score INT NOT NULL, PRIMARY KEY (id)"); err != nil {
 		log.Fatal(err)
 	}
 
+}
+
+func InsertUsers(nameUser string, scoreUser int) {
+	//Inserting a Row in to DB.
+	score := strconv.Itoa(scoreUser)
+	if _, err := db.Exec("INSERT INTO users (name, score) VALUES (" + nameUser + "," + score + ");"); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func showUsers() {
 	// Print out the balances before an account transfer (below).
 	rows, err := db.Query("SELECT name, score FROM users")
 	if err != nil {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"text/template"
 
@@ -20,7 +21,7 @@ func main() {
 		//RenderTemplate(w, "ui/menu", nil)
 	})
 	//r.Get("/Scores")
-	//log.Fatal(http.ListenAndServe(":9080", r))
+	log.Fatal(http.ListenAndServe(":9080", r))
 	cockroachdb.Conn()
 
 }
