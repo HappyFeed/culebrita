@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"../cockroachdb"
 )
 
@@ -23,7 +21,6 @@ func NewUser(name string, score string) *User {
 func (this *User) Insert() error {
 	cockroachdb.Init()
 	sql := `INSERT INTO users (name, score) VALUES (` + `'` + this.Name + `'` + "," + `'` + this.Score + `'` + `);`
-	fmt.Print(sql)
 	_, err := cockroachdb.InsertUsers(sql)
 	return err
 }
