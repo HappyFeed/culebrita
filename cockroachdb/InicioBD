@@ -4,6 +4,6 @@ Paso 2: abrir seguna terminal
 
 Paso 3: cockroach sql --insecure
 
-Paso 4: create database culebrita_db;
+Paso 4: create database culebrita_db (Si es la primera ves, de otra manera pasar al paso 5);
 
 Paso 5: set database = culebrita_db;

@@ -43,8 +43,8 @@ func saveMenu(w http.ResponseWriter, r *http.Request) {
 	context := make(map[string]interface{})
 	//username := r.FormValue("username")
 	//score := r.FormValue("score")
-	username := "Juan"
-	score := "600"
+	username := "Camila"
+	score := "800"
 	if _, err := models.NewUser(username, score); err != nil {
 		errorMessage := err.Error()
 		context["Error"] = errorMessage
