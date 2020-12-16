@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	"../cockroachdb"
 )
 
@@ -13,9 +15,13 @@ type User struct {
 
 type Users []User
 
-func NewUser(name string, score string) *User {
+func NewUser(name string, score string) (*User, error) {
 	user := &User{Name: name, Score: score}
-	return user
+	err := user.Insert()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return user, err
 }
 
 func (this *User) Insert() error {
@@ -26,6 +32,7 @@ func (this *User) Insert() error {
 }
 
 func GetUsers() Users {
+	cockroachdb.Init()
 	sql := "SELECT name, score FROM users"
 	users := Users{}
 	rows, _ := cockroachdb.ShowUsers(sql)
