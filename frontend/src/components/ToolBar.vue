@@ -6,7 +6,7 @@
       src="@/assets/serpiente.jpg"
     >
 
-      <v-toolbar-title>Culebrita</v-toolbar-title>
+      <v-toolbar-title>Snake</v-toolbar-title>
 
       <v-spacer></v-spacer>
         <template v-slot:extension>

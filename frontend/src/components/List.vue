@@ -5,17 +5,20 @@
         <v-row class="d-flex justify-center mb-6">
             <h1>Hall of fame</h1>
         </v-row>
-        <v-row class="d-flex justify-center mb-6">
+        <v-row class="d-flex justify-center mb-2" >
             <template>
-                <v-card class="mx-auto" max-width="300" tile>
+                <v-card class="mx-auto  justify-center" max-width="1000" tile outlined color="green" width="1000" >
                     <v-list disabled>
                         <v-list-item-group v-model="selectedItem" color="primary">
-                            <v-list-item v-for="(item, i) in items" :key="i">
-                                <v-list-item-icon>
-                                    <v-icon v-text="item.icon"></v-icon>
-                                </v-list-item-icon>
+                            <v-list-item v-for="(item, i) in arrayOrdenado" :key="i">
                                 <v-list-item-content>
-                                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                                    <v-list-item-title >{{(i+1)}}</v-list-item-title>
+                                </v-list-item-content>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.text" color="green"></v-list-item-title>
+                                </v-list-item-content>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.score"></v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-item-group>
@@ -36,9 +39,9 @@
     data: () => ({
       selectedItem: 1,
       items: [
-        { text: 'Real-Time', icon: 'mdi-clock' },
-        { text: 'Audience', icon: 'mdi-account' },
-        { text: 'Conversions', icon: 'mdi-flag' },
+        { text: 'Real-Time', score: '300' },
+        { text: 'Audience', score: '808' },
+        { text: 'Conversions', score: '800' }
       ],
       alignments: [
         'start',
@@ -52,5 +55,10 @@
             console.log(datos);
         }
     },
+    computed:{
+        arrayOrdenado(){
+            return this.items.sort((a,b) => b.score - a.score)
+        }
+    }
   }
 </script>
