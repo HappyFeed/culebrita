@@ -26,6 +26,7 @@ func SendData(w http.ResponseWriter, data interface{}) {
 
 func (this *Response) Send() {
 	this.writer.Header().Set("Content-Type", this.contentType)
+	this.writer.Header().Set("Access-Control-Allow-Origin", "*")
 	this.writer.WriteHeader(this.Status)
 
 	output, _ := json.Marshal(&this)

@@ -15,10 +15,10 @@
                                     <v-list-item-title >{{(i+1)}}</v-list-item-title>
                                 </v-list-item-content>
                                 <v-list-item-content>
-                                    <v-list-item-title v-text="item.text" color="green"></v-list-item-title>
+                                    <v-list-item-title v-text="item.Name" color="green"></v-list-item-title>
                                 </v-list-item-content>
                                 <v-list-item-content>
-                                    <v-list-item-title v-text="item.score"></v-list-item-title>
+                                    <v-list-item-title v-text="item.Score"></v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-item-group>
@@ -38,11 +38,9 @@
     export default {
     data: () => ({
       selectedItem: 1,
-      items: [
-        { text: 'Real-Time', score: '300' },
-        { text: 'Audience', score: '808' },
-        { text: 'Conversions', score: '800' }
-      ],
+    
+      items: [],
+
       alignments: [
         'start',
         'center',
@@ -50,15 +48,19 @@
       ],
     }),
     methods:{
-        async getDolar(){
+        async getScores(){
             let datos = await axios.get('http://localhost:9080/scores')
-            console.log(datos);
+            this.items= await datos.data.data
         }
     },
     computed:{
         arrayOrdenado(){
-            return this.items.sort((a,b) => b.score - a.score)
+            return this.items.sort((a,b) => b.Score - a.Score)
         }
-    }
+    },
+    created() {
+        this.getScores()
+    },
+
   }
 </script>
