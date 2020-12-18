@@ -16,9 +16,9 @@ func Routes() *chi.Mux {
 		middleware.Logger,
 		middleware.Recoverer,
 	)
+	Mux.Get("/", helloHandler)
 	Mux.Get("/save", saveMenu)
 	//Mux.Post("/save", saveScore)
-	Mux.Get("/hello", helloHandler)
 	Mux.Get("/scores", showScores)
 
 	return Mux
