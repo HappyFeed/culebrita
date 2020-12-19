@@ -23,7 +23,7 @@
           </validation-provider>
           <validation-provider
             v-slot="{ errors }"
-            score="score"
+            score="Score"
             rules="required|max:3"
           >
           <v-text-field
@@ -38,7 +38,6 @@
             class="mr-4"
             type="submit"
             :disabled="invalid"
-            
           >
             submit
           </v-btn>
@@ -58,6 +57,7 @@
 <script>
   import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
   import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+  import axios from 'axios'
 
   setInteractionMode('eager')
 
@@ -81,10 +81,6 @@
     message: '{_field_} {_value_} does not match {regex}',
   })
 
-  extend('email', {
-    ...email,
-    message: 'Email must be valid',
-  })
 
   export default {
     components: {
@@ -99,15 +95,18 @@
     methods: {
       submit () {
         this.$refs.observer.validate()
+        let json ={
+          "Name" : this.name, "Score" : this.score
+        }
+        axios({ method: "POST", url: 'http://localhost:9080/save',headers: {"content-type": "text/plain"}, data: json  })
+        .then( data =>{
+          console.log(data);
+        })
       },
       clear () {
-        this.name = ''
-        this.phoneNumber = ''
-        this.email = ''
-        this.select = null
-        this.checkbox = null
-        this.$refs.observer.reset()
+        this.name = '',
+        this.score = ''
       },
-    },
+      },
   }
 </script>

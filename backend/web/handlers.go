@@ -2,6 +2,8 @@ package web
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"../models"
@@ -17,8 +19,7 @@ func Routes() *chi.Mux {
 		middleware.Recoverer,
 	)
 	Mux.Get("/", helloHandler)
-	Mux.Get("/save", saveMenu)
-	//Mux.Post("/save", saveScore)
+	Mux.Post("/save", saveMenu)
 	Mux.Get("/scores", showScores)
 
 	return Mux
@@ -34,17 +35,36 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func saveMenu(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-type", "text/plain")
 	w.Header().Set("done-by", "alejandro")
 
-	res := map[string]interface{}{"Message": "Save menu"}
+	type User struct {
+		Name  string
+		Score string
+	}
 
+	var newUser User
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(body) > 0 {
+		err = json.Unmarshal(body, &newUser)
+		log.Println(newUser.Name)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	res := map[string]interface{}{"Message": "good"}
 	_ = json.NewEncoder(w).Encode(res)
 	context := make(map[string]interface{})
-	//username := r.FormValue("username")
-	//score := r.FormValue("score")
-	username := "Pepe"
-	score := "800"
+
+	username := newUser.Name
+	score := newUser.Score
 	if _, err := models.NewUser(username, score); err != nil {
 		errorMessage := err.Error()
 		context["Error"] = errorMessage
@@ -53,16 +73,4 @@ func saveMenu(w http.ResponseWriter, r *http.Request) {
 
 func showScores(w http.ResponseWriter, r *http.Request) {
 	models.SendData(w, models.GetUsers())
-}
-
-func saveScore(w http.ResponseWriter, r *http.Request) {
-	context := make(map[string]interface{})
-	//username := r.FormValue("username")
-	//score := r.FormValue("score")
-	username := "Juan"
-	score := "600"
-	if _, err := models.NewUser(username, score); err != nil {
-		errorMessage := err.Error()
-		context["Error"] = errorMessage
-	}
 }
