@@ -1,6 +1,7 @@
 import Phaser, { Physics } from "phaser";
+import GameOver from "./gameOver.js"
 
-var velocity,score, direction, snakeBody, addNew
+var velocity,score, direction, snakeBody, addNew, life
 
 export default class MainGame extends Phaser.Scene{
     constructor(){
@@ -24,6 +25,7 @@ export default class MainGame extends Phaser.Scene{
         this.velocity = 0
         this.addNew = false
         this.updateDelay = 0
+        this.life = 1
         this.snake = this.physics.add.image(200,200,'snakeC')
         this.snake.setCollideWorldBounds(true);
         this.snakeBody[0]= this.snake
@@ -31,11 +33,15 @@ export default class MainGame extends Phaser.Scene{
         this.cursor = this.input.keyboard.createCursorKeys()
 
         this.generateApplle()
+        this.generatePizza()
         this.textStyle_Key = { font: "bold 14px sans-serif", fill: "#2F4F4F", align: "center" };
         this.textStyle_Value = { font: "bold 18px sans-serif", fill: "#2F4F4F", align: "center" };
         
         this.add.text(30, 20, "SCORE", this.textStyle_Key);
         this.scoreTextValue = this.add.text(90, 18, this.score.toString(), this.textStyle_Value);
+
+        this.add.text(120, 20, "LIFES", this.textStyle_Key);
+        this.lifeTextValue = this.add.text(170, 18, this.life.toString(), this.textStyle_Value);
        
     }
 
@@ -62,10 +68,6 @@ export default class MainGame extends Phaser.Scene{
 
         this.velocity = Math.min(10, Math.floor(this.score/5));
         this.updateDelay++;
-
-        if(this.score % 10 == 0){
-            this.generateObstaculo
-        }
 
         if (this.updateDelay % (10 - this.velocity) == 0) {
 
@@ -113,8 +115,9 @@ export default class MainGame extends Phaser.Scene{
                 this.addNew = false;
             }
             
+            this.physics.add.overlap(this.snake, this.damage, this.pizzaOverlap, null, this);
             this.physics.add.overlap(this.snakeBody, this.platforms, this.collectApple, null, this);
-        
+            this.physics.add.collider(this.snakeBody, this.obstaculos, this.obstaculeCollision, null, this);
         }
 
         
@@ -131,10 +134,17 @@ export default class MainGame extends Phaser.Scene{
         this.time.delayedCall(10000, this.generateApplle, [], this);
     }
 
+    generatePizza(){
+        this.damage = this.physics.add.staticGroup();
+        this.damage.create(Math.floor(Math.random() *60 ) * 16, Math.floor(Math.random() * 10 ) * 16, 'pizza');
+        this.physics.add.collider(this.damage);
+        this.time.delayedCall(15000, this.generatePizza, [], this);
+    }
+
     generateObstaculo(){
         this.obstaculos = this.physics.add.staticGroup();
         this.obstaculos.create(Math.floor(Math.random() * 60 ) * 16, Math.floor(Math.random() * 10 ) * 16, 'obstaculo');
-        this.physics.add.collider(this.obstaculos);
+        this.physics.add.collider(this.snakeBody, this.obstaculos);
     }
 
     collectApple (snake, apple){      
@@ -143,6 +153,20 @@ export default class MainGame extends Phaser.Scene{
         this.scoreTextValue.text = this.score.toString();
         this.addNew = true
 
+    }
+
+    obstaculeCollision(){
+
+    }
+
+    pizzaOverlap ( snake, pizza){      
+        pizza.disableBody(true, true);
+        this.life--       
+        this.lifeTextValue.text = this.life.toString();
+        if(this.life==0){
+            this.scene.start("GameOver")
+        }
+        
     }
  
 }

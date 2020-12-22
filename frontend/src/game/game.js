@@ -1,5 +1,7 @@
 import Phaser from "phaser"
 import Menu from "./scenes/menu"
+import GameOver from "./scenes/gameOver"
+import MainGame from "./scenes/mainGame"
 
 function launch(containerId){
     return new Phaser.Game({       
@@ -14,7 +16,7 @@ function launch(containerId){
             }
         },
         scene: [
-            Menu,
+            Menu, GameOver, MainGame
         ],
         scale:{
             autoCenter: Phaser.Scale.CENTER_BOTH,
