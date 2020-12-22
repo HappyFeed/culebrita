@@ -2,7 +2,7 @@ import Phaser from "phaser"
 import Menu from "./scenes/menu"
 
 function launch(containerId){
-    return new Phaser.Game({
+    return new Phaser.Game({       
         type: Phaser.AUTO,
         parent: containerId,
         physics: {
@@ -16,8 +16,12 @@ function launch(containerId){
         scene: [
             Menu,
         ],
-        width: "100%",
-        height: "200%",
+        scale:{
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: "80",
+            height: "80",
+        }
+
                     
     })
 }

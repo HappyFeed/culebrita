@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <h1>Hello home</h1>
-    <GameC></GameC>
+    <v-main >
+      <GameC></GameC> 
+    </v-main> 
   </div>
 </template>
 

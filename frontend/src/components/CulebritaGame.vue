@@ -1,6 +1,6 @@
 <template>
-  <div id= idPlace>
-   
+  <div id= idPlace class="d-flex justify-center mb-6" elevation="2">
+
   </div>
 </template>
 <script>
