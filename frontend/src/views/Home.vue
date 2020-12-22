@@ -1,17 +1,18 @@
 <template>
   <div class="home">
     <h1>Hello home</h1>
-    <p>asjldalskdjsakjdlasjaksljaklsajlasdk</p>
+    <GameC></GameC>
   </div>
 </template>
 
 <script>
 
+import GameC from "@/components/CulebritaGame.vue"
 
 export default {
   name: 'Home',
   components: {
-   
+    GameC
   }
 }
 </script>

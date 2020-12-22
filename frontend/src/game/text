@@ -1,0 +1,27 @@
+init() {
+            this.cameras.main.setBackgroundColor("#24252A");
+            this.load.image('pizza','@/assets/pizza.png');          
+          },
+          create() {
+            this.pizza = this.physics.add.sprite(100,100, 'pizza');
+            this.input.keyboard.on("keydown_D", () =>{
+              this.pizza.setVelocity(0,0);
+              this.pizza.setVelocity(50,0);
+            });
+            this.input.keyboard.on("keydown_A", () =>{
+              this.pizza.setVelocity(0,0);
+              this.pizza.setVelocity(-50,0);
+            });
+            this.input.keyboard.on("keydown_W", () =>{
+              this.pizza.setVelocity(0,0);
+              this.pizza.setVelocity(0,-50);
+            });
+            this.input.keyboard.on("keydown_S", () =>{
+              this.pizza.setVelocity(0,0);
+              this.pizza.setVelocity(0,50);
+            });
+            //this.pizza.setVelocity(50,0);
+          },
+          update() {
+            
+          }
