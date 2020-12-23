@@ -1,4 +1,5 @@
 import Phaser, { Physics } from "phaser";
+import GameOver from "./GameOver"
 
 var velocity,score, direction, snakeBody, addNew, life
 
@@ -24,7 +25,7 @@ export default class MainGame extends Phaser.Scene{
         this.velocity = 0
         this.addNew = false
         this.updateDelay = 0
-        this.life = 5
+        this.life = 1
         this.snake = this.physics.add.image(200,200,'snakeC')
         this.snake.setCollideWorldBounds(true);
         this.snakeBody[0]= this.snake
@@ -137,7 +138,7 @@ export default class MainGame extends Phaser.Scene{
         this.damage = this.physics.add.staticGroup();
         this.damage.create(Math.floor(Math.random() *1300 ), Math.floor(Math.random() * 300 ) , 'pizza');
         this.physics.add.collider(this.damage);
-        this.time.delayedCall(15000, this.generatePizza, [], this);
+        this.time.delayedCall(20000, this.generatePizza, [], this);
     }
 
     generateObstaculo(){
@@ -163,6 +164,7 @@ export default class MainGame extends Phaser.Scene{
         this.life--       
         this.lifeTextValue.text = this.life.toString();
         if(this.life==0){
+            this.scene.add("GameOver", GameOver)
             this.scene.start("GameOver")
         }
         

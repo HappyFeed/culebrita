@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import Menu from "./Menu"
 
 export default class GameOver extends Phaser.Scene{
     constructor(){
@@ -14,6 +15,7 @@ export default class GameOver extends Phaser.Scene{
         alert("Game over")
         this.startBtn = this.add.sprite(100, 100, 'buttonStart').setInteractive();
         this.startBtn.on('pointerdown', function (event){
+            this.scene.add("Menu", Menu)
             this.scene.start("Menu")
         }, this)
     
