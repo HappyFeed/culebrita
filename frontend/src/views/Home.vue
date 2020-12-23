@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <v-main class="mx-auto  justify-center">
-      <GameC></GameC> 
+    <v-main>
+         <GameC></GameC> 
     </v-main> 
   </div>
 </template>

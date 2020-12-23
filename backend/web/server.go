@@ -8,10 +8,12 @@ import (
 	"github.com/go-chi/chi"
 )
 
+//Struct that define the server
 type Server struct {
 	server *http.Server
 }
 
+//Constructor of the server struct
 func NewServer(Mux *chi.Mux) *Server {
 	s := &http.Server{
 		Addr:           ":9080",
@@ -24,6 +26,7 @@ func NewServer(Mux *chi.Mux) *Server {
 	return &Server{s}
 }
 
+//Function that start the server
 func (s *Server) Run() {
 	log.Fatal(s.server.ListenAndServe())
 }

@@ -9,20 +9,22 @@ import (
 
 var db *sql.DB
 
+//Initialice the database
 func Init() {
 	Connect()
 	CreateTable()
 }
 
+//Return de connection to the database.
 func GetConnection() *sql.DB {
 	return db
 }
 
+// Connect to the "culebrita_db" database.
 func Connect() {
 	if GetConnection() != nil {
 		return
 	}
-	// Connect to the "culebrita_db" database.
 	if connection, err := sql.Open("postgres", "postgresql://root@localhost:26257/culebrita_db?sslmode=disable"); err != nil {
 		panic(err)
 	} else {
@@ -30,8 +32,8 @@ func Connect() {
 	}
 }
 
+// Create the "users" table.
 func CreateTable() {
-	// Create the "users" table.
 	if _, err := db.Exec(
 		"CREATE TABLE IF NOT EXISTS users (id SERIAL, name STRING(50) NULL, score STRING(100) NOT NULL, PRIMARY KEY (id))"); err != nil {
 		log.Fatal(err)
@@ -39,8 +41,8 @@ func CreateTable() {
 
 }
 
+//Inserting a Row in to database.
 func InsertUsers(query string) (sql.Result, error) {
-	//Inserting a Row in to DB.
 	result, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
@@ -48,8 +50,8 @@ func InsertUsers(query string) (sql.Result, error) {
 	return result, err
 }
 
+// function SELECT to get the users from database
 func ShowUsers(query string, args ...interface{}) (*sql.Rows, error) {
-	// Print out the balances before an account transfer (below).
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		log.Println(err)

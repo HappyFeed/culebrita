@@ -10,7 +10,8 @@ export const config = {
         width: "100",
         height: "50",
     }, 
-    type: Phaser.AUTO,     
+    type: Phaser.AUTO,
+    parent: "canvasParent", 
     physics: {
         default: 'arcade',
         arcade: {

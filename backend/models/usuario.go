@@ -6,15 +6,17 @@ import (
 	"../cockroachdb"
 )
 
-// usuario defines the properties of a User to be listed
+// Struct that define a User
 type User struct {
 	Id    string `json:id`
 	Name  string `json:name,omitempty`
 	Score string `json:score,omitempty`
 }
 
+//Array that save users
 type Users []User
 
+//Constructor of the user struct
 func NewUser(name string, score string) (*User, error) {
 	user := &User{Name: name, Score: score}
 	err := user.Insert()
@@ -24,6 +26,7 @@ func NewUser(name string, score string) (*User, error) {
 	return user, err
 }
 
+//Function that make the query and send to the database class
 func (this *User) Insert() error {
 	cockroachdb.Init()
 	sql := `INSERT INTO users (name, score) VALUES (` + `'` + this.Name + `'` + "," + `'` + this.Score + `'` + `);`
@@ -31,6 +34,7 @@ func (this *User) Insert() error {
 	return err
 }
 
+//Function that make the call to get the users
 func GetUsers() Users {
 	cockroachdb.Init()
 	sql := "SELECT name, score FROM users"

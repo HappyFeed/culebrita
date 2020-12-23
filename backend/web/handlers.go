@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
+//Function that init the router and created the endpoints
 func Routes() *chi.Mux {
 	Mux := chi.NewMux()
 
@@ -20,15 +21,17 @@ func Routes() *chi.Mux {
 	return Mux
 }
 
+//Funcion that response the endpoint
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	w.Header().Set("done-by", "alejandro")
 
-	res := map[string]interface{}{"Message": "Hello world"}
+	res := map[string]interface{}{"Message": "Welcome"}
 
 	_ = json.NewEncoder(w).Encode(res)
 }
 
+//Function that make the process to get and send the data to save users
 func saveMenu(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "text/plain")
@@ -66,6 +69,7 @@ func saveMenu(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Function that call to get the users
 func showScores(w http.ResponseWriter, r *http.Request) {
 	models.SendData(w, models.GetUsers())
 }
