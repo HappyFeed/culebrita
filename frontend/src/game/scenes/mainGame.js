@@ -1,5 +1,4 @@
 import Phaser, { Physics } from "phaser";
-import GameOver from "./gameOver.js"
 
 var velocity,score, direction, snakeBody, addNew, life
 
@@ -25,7 +24,7 @@ export default class MainGame extends Phaser.Scene{
         this.velocity = 0
         this.addNew = false
         this.updateDelay = 0
-        this.life = 1
+        this.life = 5
         this.snake = this.physics.add.image(200,200,'snakeC')
         this.snake.setCollideWorldBounds(true);
         this.snakeBody[0]= this.snake
@@ -129,14 +128,14 @@ export default class MainGame extends Phaser.Scene{
 
     generateApplle(){
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(Math.floor(Math.random() * 60 ) * 16, Math.floor(Math.random() * 10 ) * 16, 'apple');
+        this.platforms.create(Math.floor(Math.random() *1300), Math.floor(Math.random() * 300 ), 'apple');
         this.physics.add.collider(this.platforms);
         this.time.delayedCall(10000, this.generateApplle, [], this);
     }
 
     generatePizza(){
         this.damage = this.physics.add.staticGroup();
-        this.damage.create(Math.floor(Math.random() *60 ) * 16, Math.floor(Math.random() * 10 ) * 16, 'pizza');
+        this.damage.create(Math.floor(Math.random() *1300 ), Math.floor(Math.random() * 300 ) , 'pizza');
         this.physics.add.collider(this.damage);
         this.time.delayedCall(15000, this.generatePizza, [], this);
     }

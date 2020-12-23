@@ -8,16 +8,11 @@ import (
 
 	"../models"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 )
 
 func Routes() *chi.Mux {
 	Mux := chi.NewMux()
 
-	Mux.Use(
-		middleware.Logger,
-		middleware.Recoverer,
-	)
 	Mux.Get("/", helloHandler)
 	Mux.Post("/save", saveMenu)
 	Mux.Get("/scores", showScores)

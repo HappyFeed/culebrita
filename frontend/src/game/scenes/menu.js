@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import MainGame from "./mainGame.js"
 
 export default class Menu extends Phaser.Scene{
     constructor(){
@@ -12,7 +11,7 @@ export default class Menu extends Phaser.Scene{
     }
 
     create(){
-        this.startBtn = this.add.sprite(100, 100, 'buttonStart').setInteractive();
+        this.startBtn = this.add.sprite(662, 164, 'buttonStart').setInteractive();
         this.startBtn.on('pointerdown', function (event){
             this.scene.start("MainGame")
         }, this)
