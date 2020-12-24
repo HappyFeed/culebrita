@@ -1,7 +1,12 @@
 <template>
   <div class="home">
     <v-main>
-         <GameC></GameC> 
+      <v-row>
+        <GameC></GameC>
+      </v-row>
+      <v-row>
+        <FormSave></FormSave>
+      </v-row>  
     </v-main> 
   </div>
 </template>
@@ -9,11 +14,13 @@
 <script>
 
 import GameC from "@/components/CulebritaGame.vue"
+import FormSave from "@/components/FormS.vue"
 
 export default {
   name: 'Home',
   components: {
-    GameC
+    GameC,
+    FormSave
   }
 }
 </script>

@@ -13,7 +13,6 @@
         <v-tabs align-with-title>
           <v-tab to="/"> Home</v-tab>
           <v-tab to="/scores">Scores</v-tab>
-          <v-tab to="/save">Save</v-tab>
         </v-tabs>
       </template>
        

@@ -26,12 +26,13 @@ export default class MainGame extends Phaser.Scene{
         this.addNew = false
         this.updateDelay = 0
         this.life = 1
-        this.snake = this.physics.add.image(200,200,'snakeC')
+        this.snake = this.physics.add.sprite(200,200,'snakeC')
         this.snake.setCollideWorldBounds(true);
+        this.snake.checkWorldBounds = true;
         this.snakeBody[0]= this.snake
-
         this.cursor = this.input.keyboard.createCursorKeys()
-
+       
+        
         this.generateApplle()
         this.generatePizza()
         this.textStyle_Key = { font: "bold 14px sans-serif", fill: "#2F4F4F", align: "center" };
@@ -42,7 +43,8 @@ export default class MainGame extends Phaser.Scene{
 
         this.add.text(120, 20, "LIFES", this.textStyle_Key);
         this.lifeTextValue = this.add.text(170, 18, this.life.toString(), this.textStyle_Value);
-       
+        
+        this.physics.add.overlap(this.snakeBody, this.obstaculos, this.obstaculeCollision, null, this);
     }
 
     update(){
@@ -68,6 +70,7 @@ export default class MainGame extends Phaser.Scene{
 
         this.velocity = Math.min(10, Math.floor(this.score/5));
         this.updateDelay++;
+
 
         if (this.updateDelay % (10 - this.velocity) == 0) {
 
@@ -102,6 +105,9 @@ export default class MainGame extends Phaser.Scene{
 
             // Place the last cell in the front of the stack.
             // Mark it as the first cell.
+            if(this.score != 0 && this.score % 10 == 0){
+                this.generateObstaculo()
+            }
 
             this.snakeBody.push(lastCell);
             firstCell = lastCell;
@@ -111,19 +117,17 @@ export default class MainGame extends Phaser.Scene{
             // Increase length of snake if an apple had been eaten.
             // Create a block in the back of the snake with the old position of the previous last block (it has moved now along with the rest of the snake).
             if(this.addNew){
-                this.snakeBody.unshift(this.add.sprite(oldLastCellx, oldLastCelly, 'snakeB'));
+                this.snakeBody.unshift(this.physics.add.sprite(oldLastCellx, oldLastCelly, 'snakeB'));
                 this.addNew = false;
             }
             
             this.physics.add.overlap(this.snake, this.damage, this.pizzaOverlap, null, this);
             this.physics.add.overlap(this.snakeBody, this.platforms, this.collectApple, null, this);
-            this.physics.add.collider(this.snakeBody, this.obstaculos, this.obstaculeCollision, null, this);
+           
+            
         }
 
-        
-        
-
-
+         
 
     }
 
@@ -143,8 +147,8 @@ export default class MainGame extends Phaser.Scene{
 
     generateObstaculo(){
         this.obstaculos = this.physics.add.staticGroup();
-        this.obstaculos.create(Math.floor(Math.random() * 60 ) * 16, Math.floor(Math.random() * 10 ) * 16, 'obstaculo');
-        this.physics.add.collider(this.snakeBody, this.obstaculos);
+        this.obstaculos.create(Math.floor(Math.random() *1300 ), Math.floor(Math.random() * 300 ), 'obstaculo');
+        this.time.delayedCall(10000, this.generateObstaculo, [], this);
     }
 
     collectApple (snake, apple){      
@@ -155,8 +159,8 @@ export default class MainGame extends Phaser.Scene{
 
     }
 
-    obstaculeCollision(){
-
+    obstaculeCollision(snake){
+       console.log("obstaculo")
     }
 
     pizzaOverlap ( snake, pizza){      

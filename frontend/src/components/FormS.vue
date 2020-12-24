@@ -2,7 +2,7 @@
   <div>
     <v-container class="grey lighten-5 mb-6" elevation="2">
       <v-row class="d-flex justify-center mb-6">
-        <h1>Save your glory</h1>
+        <h1>Save your Score</h1>
       </v-row>
       <v-row class="d-flex justify-center mb-6" width="800">
         <validation-observer ref="observer" v-slot="{ invalid }">

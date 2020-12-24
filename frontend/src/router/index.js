@@ -14,11 +14,6 @@ const routes = [
     name: 'Score',
     component: () => import(/* webpackChunkName: "score" */ '../views/Score.vue')
   },
-  {
-    path: '/save',
-    name: 'Save',
-    component: () => import(/* webpackChunkName: "save" */ '../views/Save.vue')
-  }
 ]
 
 const router = new VueRouter({
