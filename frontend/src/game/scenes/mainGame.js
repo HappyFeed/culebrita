@@ -20,8 +20,9 @@ export default class MainGame extends Phaser.Scene{
     create(){
         this.snakeBody = []
         this.direction = 'right'
+        this.stop = null
         this.new_direction = null
-        this.score = 0
+        this.score = 9
         this.velocity = 0
         this.addNew = false
         this.updateDelay = 0
@@ -34,7 +35,7 @@ export default class MainGame extends Phaser.Scene{
        
         
         this.generateApplle()
-        this.generatePizza()
+        //this.generatePizza()
         this.textStyle_Key = { font: "bold 14px sans-serif", fill: "#2F4F4F", align: "center" };
         this.textStyle_Value = { font: "bold 18px sans-serif", fill: "#2F4F4F", align: "center" };
         
@@ -44,7 +45,7 @@ export default class MainGame extends Phaser.Scene{
         this.add.text(120, 20, "LIFES", this.textStyle_Key);
         this.lifeTextValue = this.add.text(170, 18, this.life.toString(), this.textStyle_Value);
         
-        this.physics.add.overlap(this.snakeBody, this.obstaculos, this.obstaculeCollision, null, this);
+       
     }
 
     update(){
@@ -52,20 +53,12 @@ export default class MainGame extends Phaser.Scene{
 
         if(this.cursor.right.isDown && this.direction!='left'){
             this.direction = 'right'
-            /*this.snake.setVelocity(0,0);
-            this.snake.setVelocity(this.velocity,0);*/
         }else if (this.cursor.left.isDown && this.direction!='right'){
             this.direction = 'left'
-            /*this.snake.setVelocity(0,0);
-            this.snake.setVelocity(-this.velocity,0);*/
         }else if (this.cursor.up.isDown && this.direction!='down'){
             this.direction = 'up'
-            /*this.snake.setVelocity(0,0);
-            this.snake.setVelocity(0,-this.velocity);*/
         }else if (this.cursor.down.isDown && this.direction!='up'){
             this.direction = 'down'
-            /*this.snake.setVelocity(0,0);
-            this.snake.setVelocity(0,this.velocity);*/
         }
 
         this.velocity = Math.min(10, Math.floor(this.score/5));
@@ -105,8 +98,9 @@ export default class MainGame extends Phaser.Scene{
 
             // Place the last cell in the front of the stack.
             // Mark it as the first cell.
-            if(this.score != 0 && this.score % 10 == 0){
+            if(this.flag == true){
                 this.generateObstaculo()
+                this.flag = false
             }
 
             this.snakeBody.push(lastCell);
@@ -122,11 +116,10 @@ export default class MainGame extends Phaser.Scene{
             }
             
             this.physics.add.overlap(this.snake, this.damage, this.pizzaOverlap, null, this);
-            this.physics.add.overlap(this.snakeBody, this.platforms, this.collectApple, null, this);
-           
-            
+            this.physics.add.overlap(this.snakeBody, this.platforms, this.collectApple, null, this); 
+            this.physics.add.collider(this.snake, this.obstaculos, this.obstaculeCollision, null, this);          
         }
-
+        
          
 
     }
@@ -148,7 +141,6 @@ export default class MainGame extends Phaser.Scene{
     generateObstaculo(){
         this.obstaculos = this.physics.add.staticGroup();
         this.obstaculos.create(Math.floor(Math.random() *1300 ), Math.floor(Math.random() * 300 ), 'obstaculo');
-        this.time.delayedCall(10000, this.generateObstaculo, [], this);
     }
 
     collectApple (snake, apple){      
@@ -156,11 +148,27 @@ export default class MainGame extends Phaser.Scene{
         this.score++
         this.scoreTextValue.text = this.score.toString();
         this.addNew = true
+        if(this.score % 10 == 0){
+            this.flag = true
+        }
 
     }
 
-    obstaculeCollision(snake){
-       console.log("obstaculo")
+    obstaculeCollision(snake, obstaculo){
+        if(this.direction == "left" || this.direction == "right"){
+            if(this.snake.x > obstaculo.x){
+                this.direction = 'up'
+            }else if(this.snake.x < obstaculo.x){
+                this.direction = 'down'
+            }
+        }else{
+             if(this.snake.y < obstaculo.y){
+                this.direction = 'left'
+            }else if(this.snake.y > obstaculo.y){
+                this.direction = 'right'
+            }
+        }
+        
     }
 
     pizzaOverlap ( snake, pizza){      
