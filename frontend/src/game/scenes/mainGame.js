@@ -1,7 +1,7 @@
 import Phaser, { Physics } from "phaser";
 import GameOver from "./GameOver"
 
-var velocity,score, direction, snakeBody, addNew, life
+var velocity,score, direction, snakeBody, addNew
 
 export default class MainGame extends Phaser.Scene{
     constructor(){
@@ -22,11 +22,10 @@ export default class MainGame extends Phaser.Scene{
         this.direction = 'right'
         this.stop = null
         this.new_direction = null
-        this.score = 9
+        this.score = 0
         this.velocity = 0
         this.addNew = false
         this.updateDelay = 0
-        this.life = 1
         this.snake = this.physics.add.sprite(200,200,'snakeC')
         this.snake.setCollideWorldBounds(true);
         this.snake.checkWorldBounds = true;
@@ -35,17 +34,12 @@ export default class MainGame extends Phaser.Scene{
        
         
         this.generateApplle()
-        //this.generatePizza()
+        this.generatePizza()
         this.textStyle_Key = { font: "bold 14px sans-serif", fill: "#2F4F4F", align: "center" };
         this.textStyle_Value = { font: "bold 18px sans-serif", fill: "#2F4F4F", align: "center" };
         
         this.add.text(30, 20, "SCORE", this.textStyle_Key);
-        this.scoreTextValue = this.add.text(90, 18, this.score.toString(), this.textStyle_Value);
-
-        this.add.text(120, 20, "LIFES", this.textStyle_Key);
-        this.lifeTextValue = this.add.text(170, 18, this.life.toString(), this.textStyle_Value);
-        
-       
+        this.scoreTextValue = this.add.text(90, 18, this.score.toString(), this.textStyle_Value);     
     }
 
     update(){
@@ -111,7 +105,8 @@ export default class MainGame extends Phaser.Scene{
             // Increase length of snake if an apple had been eaten.
             // Create a block in the back of the snake with the old position of the previous last block (it has moved now along with the rest of the snake).
             if(this.addNew){
-                this.snakeBody.unshift(this.physics.add.sprite(oldLastCellx, oldLastCelly, 'snakeB'));
+                this.snake = this.physics.add.sprite(oldLastCellx, oldLastCelly, 'snakeB')
+                this.snakeBody.unshift(this.snake);
                 this.addNew = false;
             }
             
@@ -173,13 +168,15 @@ export default class MainGame extends Phaser.Scene{
 
     pizzaOverlap ( snake, pizza){      
         pizza.disableBody(true, true);
-        this.life--       
-        this.lifeTextValue.text = this.life.toString();
-        if(this.life==0){
+        this.snakeBody.shift()
+        if(this.snakeBody.length > 2){
+            this.snakeBody.shift()
+            this.snakeBody.shift()
+        }else{
             this.scene.add("GameOver", GameOver)
             this.scene.start("GameOver")
         }
-        
+             
     }
  
 }
