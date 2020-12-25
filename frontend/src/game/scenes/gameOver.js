@@ -12,8 +12,7 @@ export default class GameOver extends Phaser.Scene{
     }
 
     create(){
-        alert("Game over")
-        this.startBtn = this.add.sprite(100, 100, 'buttonStart').setInteractive();
+        this.startBtn = this.add.sprite(662, 164, 'buttonStart').setInteractive();
         this.startBtn.on('pointerdown', function (event){
             this.scene.add("Menu", Menu)
             this.scene.start("Menu")

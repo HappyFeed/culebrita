@@ -168,10 +168,12 @@ export default class MainGame extends Phaser.Scene{
 
     pizzaOverlap ( snake, pizza){      
         pizza.disableBody(true, true);
-        this.snakeBody.shift()
         if(this.snakeBody.length > 2){
-            this.snakeBody.shift()
-            this.snakeBody.shift()
+            this.body1 = this.snakeBody.shift()
+            this.body2 = this.snakeBody.shift()
+            this.body1.disableBody(true, true);
+            this.body2.disableBody(true, true);
+            
         }else{
             this.scene.add("GameOver", GameOver)
             this.scene.start("GameOver")
