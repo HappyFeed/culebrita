@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+//config of the endpoint to the vue router
 const routes = [
   {
     path: '/',

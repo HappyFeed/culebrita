@@ -88,8 +88,8 @@
       ValidationObserver,
     },
     data: () => ({
-      name: '',
-      score: '',
+      name: '', //name of the user
+      score: '', //score of the user
     }),
 
     methods: {
@@ -98,6 +98,7 @@
         let json ={
           "Name" : this.name, "Score" : this.score
         }
+        //function that send the data to the server 
         axios({ method: "POST", url: 'http://localhost:9080/save',headers: {"content-type": "text/plain"}, data: json  })
         .then( data =>{
           console.log(data);

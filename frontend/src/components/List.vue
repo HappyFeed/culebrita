@@ -48,12 +48,14 @@
       ],
     }),
     methods:{
+        //asyncronic method that make the call to the server to get the scores
         async getScores(){
             let datos = await axios.get('http://localhost:9080/scores')
             this.items= await datos.data.data
         }
     },
     computed:{
+        //function that sort the score array 
         arrayOrdenado(){
             return this.items.sort((a,b) => b.Score - a.Score)
         }

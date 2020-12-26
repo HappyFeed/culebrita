@@ -14,6 +14,7 @@ export default {
     }  
   },
 
+  //method that asyncronic import the instance of the game
   async mounted(){
     const GameConfig = await import("@/game/game.js") 
     this.$nextTick(() =>{
