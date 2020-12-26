@@ -3,6 +3,7 @@ import GameOver from "./GameOver"
 
 var velocity,score, direction, snakeBody, addNew
 
+//The structure of the Main game scene
 export default class MainGame extends Phaser.Scene{
     constructor(){
         super({key: "MainGame"});
@@ -18,18 +19,18 @@ export default class MainGame extends Phaser.Scene{
     }
 
     create(){
-        this.snakeBody = []
-        this.direction = 'right'
-        this.stop = null
-        this.new_direction = null
-        this.score = 0
-        this.velocity = 0
-        this.addNew = false
-        this.updateDelay = 0
+        this.snakeBody = [] //array of snake parts
+        this.direction = 'right' // var that indicate the direction
+        this.score = 0 //var that indicate the score of the game
+        this.velocity = 0 //var that indicate velocity of the snake
+        this.addNew = false  //var that indicate the add of a snake part
+        this.updateDelay = 0 //var that indicate the delay for movement
         this.snake = this.physics.add.sprite(200,200,'snakeC')
         this.snake.setCollideWorldBounds(true);
         this.snake.checkWorldBounds = true;
         this.snakeBody[0]= this.snake
+
+        //Init the cursor for keyboard inputs
         this.cursor = this.input.keyboard.createCursorKeys()
        
         
@@ -38,13 +39,14 @@ export default class MainGame extends Phaser.Scene{
         this.textStyle_Key = { font: "bold 14px sans-serif", fill: "#2F4F4F", align: "center" };
         this.textStyle_Value = { font: "bold 18px sans-serif", fill: "#2F4F4F", align: "center" };
         
+        //Add the score text in the canvas
         this.add.text(30, 20, "SCORE", this.textStyle_Key);
         this.scoreTextValue = this.add.text(90, 18, this.score.toString(), this.textStyle_Value);     
     }
 
     update(){
 
-
+        //Change and avoid that the snake take a direction that can´t take
         if(this.cursor.right.isDown && this.direction!='left'){
             this.direction = 'right'
         }else if (this.cursor.left.isDown && this.direction!='right'){
@@ -55,10 +57,11 @@ export default class MainGame extends Phaser.Scene{
             this.direction = 'down'
         }
 
+        //Increment velocity 
         this.velocity = Math.min(10, Math.floor(this.score/5));
         this.updateDelay++;
 
-
+        //produce delay for the update function, this to make a clear movement of the snake
         if (this.updateDelay % (10 - this.velocity) == 0) {
 
 
@@ -67,11 +70,7 @@ export default class MainGame extends Phaser.Scene{
                 oldLastCellx = lastCell.x,
                 oldLastCelly = lastCell.y;
 
-            if(this.new_direction){
-                this.direction = this.new_direction;
-                this.new_direction = null;
-            }
-
+            //struct that move the snake parts 
             if(this.direction == 'right'){
 
                 lastCell.x = firstCell.x + 16;
@@ -90,26 +89,24 @@ export default class MainGame extends Phaser.Scene{
                 lastCell.y = firstCell.y + 16;
             }
 
-            // Place the last cell in the front of the stack.
-            // Mark it as the first cell.
+            //Add a obstacule every 10 points
             if(this.flag == true){
                 this.generateObstaculo()
                 this.flag = false
             }
 
+            //Add a snake instance to the end of the array 
             this.snakeBody.push(lastCell);
             firstCell = lastCell;
 
-            // End of snake movement.
-
-            // Increase length of snake if an apple had been eaten.
-            // Create a block in the back of the snake with the old position of the previous last block (it has moved now along with the rest of the snake).
+            //Add a part of the snake behind the last part 
             if(this.addNew){
                 this.snake = this.physics.add.sprite(oldLastCellx, oldLastCelly, 'snakeB')
                 this.snakeBody.unshift(this.snake);
                 this.addNew = false;
             }
-            
+
+            //Sentence that evaluate the interaction between snake and the objets 
             this.physics.add.overlap(this.snake, this.damage, this.pizzaOverlap, null, this);
             this.physics.add.overlap(this.snakeBody, this.platforms, this.collectApple, null, this); 
             this.physics.add.collider(this.snake, this.obstaculos, this.obstaculeCollision, null, this);          
@@ -119,6 +116,7 @@ export default class MainGame extends Phaser.Scene{
 
     }
 
+    //Function that make the instance of the apples
     generateApplle(){
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(Math.floor(Math.random() *1300), Math.floor(Math.random() * 300 ), 'apple');
@@ -126,6 +124,7 @@ export default class MainGame extends Phaser.Scene{
         this.time.delayedCall(10000, this.generateApplle, [], this);
     }
 
+    //Function that make the instance of the pizzas
     generatePizza(){
         this.damage = this.physics.add.staticGroup();
         this.damage.create(Math.floor(Math.random() *1300 ), Math.floor(Math.random() * 300 ) , 'pizza');
@@ -133,11 +132,13 @@ export default class MainGame extends Phaser.Scene{
         this.time.delayedCall(20000, this.generatePizza, [], this);
     }
 
+    //Function that make the instance of the obstacles
     generateObstaculo(){
         this.obstaculos = this.physics.add.staticGroup();
         this.obstaculos.create(Math.floor(Math.random() *1300 ), Math.floor(Math.random() * 300 ), 'obstaculo');
     }
 
+    //Function that plus one the score when snake overlap an applpe
     collectApple (snake, apple){      
         apple.disableBody(true, true);
         this.score++
@@ -149,6 +150,7 @@ export default class MainGame extends Phaser.Scene{
 
     }
 
+    //Function that change the direction of the snake when collide a obstacule
     obstaculeCollision(snake, obstaculo){
         if(this.direction == "left" || this.direction == "right"){
             if(this.snake.x > obstaculo.x){
@@ -166,6 +168,7 @@ export default class MainGame extends Phaser.Scene{
         
     }
 
+    //Function that delete two parts of snake body when snake overlap the pizza
     pizzaOverlap ( snake, pizza){      
         pizza.disableBody(true, true);
         if(this.snakeBody.length > 2){

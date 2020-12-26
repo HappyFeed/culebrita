@@ -3,7 +3,7 @@ import Menu from "./scenes/Menu"
 import GameOver from "./scenes/GameOver"
 import MainGame from "./scenes/MainGame"
 
-
+//The configuration of a game with phaser
 export const config = {
     scene: [ GameOver, MainGame, Menu],
     scale:{
